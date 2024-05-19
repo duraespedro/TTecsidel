@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento Free Flow</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&family=Montserrat:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background: linear-gradient(to right, #00c6ff, #0072ff); 
+            color: #333; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            color: #fff;
+        }
+        .container { 
+            background: #fff; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 1200px; 
+            transition: all 0.3s ease-in-out; 
+            color: #333; 
+            overflow: auto;
+            height: 90vh;
+        }
+        .container:hover {
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+        }
+        h1, h2 { 
+            color: #0072ff; 
+            margin-bottom: 20px; 
+            font-family: 'Pacifico', cursive;
+        }
+        .table { 
+            border-radius: 8px; 
+            overflow: hidden; 
+        }
+        .table th { 
+            background: #0072ff; 
+            color: #fff; 
+        }
+        .status-indicator { 
+            display: inline-block; 
+            width: 10px; 
+            height: 10px; 
+            border-radius: 50%; 
+            margin-right: 5px; 
+        }
+        .status-online { 
+            background: #28a745; 
+        }
+        .status-offline { 
+            background: #dc3545; 
+        }
+        .vehicle-card { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            border-radius: 8px; 
+            width: calc(50% - 10px); 
+            box-sizing: border-box; 
+            transition: all 0.3s ease-in-out; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+        }
+        .vehicle-card:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+        }
+        #vehicleInfo { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 20px; 
+        }
+        .vehicle-info-label { 
+            font-weight: bold; 
+        }
+        #chartContainer { 
+            height: 370px; 
+            width: 100%; 
+            margin-top: 20px; 
+        }
+        .additional-info {
+            margin-top: 20px;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #0072ff;
+            background: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+        .back-btn:hover {
+            background: #f1f1f1;
+            color: #00c6ff;
+        }
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Monitoramento Free Flow</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Status dos Equipamentos</h2>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Equipamento</th>
+                            <th>Status</th>
+                            <th>Última Atualização</th>
+                        </tr>
+                    </thead>
+                    <tbody id="equipmentTableBody">
+                        <tr>
+                            <td>Câmera 1</td>
+                            <td><span class="status-indicator status-online"></span> Online</td>
+                            <td>18/05/2024 14:32</td>
+                        </tr>
+                        <tr>
+                            <td>Antena 1</td>
+                            <td><span class="status-indicator status-offline"></span> Offline</td>
+                            <td>18/05/2024 14:28</td>
+                        </tr>
+                        <tr>
+                            <td>Sensor 1</td>
+                            <td><span class="status-indicator status-online"></span> Online</td>
+                            <td>18/05/2024 14:35</td>
+                        </tr>
+                        <tr>
+                            <td>Câmera 2</td>
+                            <td><span class="status-indicator status-online"></span> Online</td>
+                            <td>18/05/2024 14:35</td>
+                        </tr>
+                        <tr>
+                            <td>Antena 2</td>
+                            <td><span class="status-indicator status-online"></span> Online</td>
+                            <td>18/05/2024 14:36</td>
+                        </tr>
+                        <tr>
+                            <td>Sensor 2</td>
+                            <td><span class="status-indicator status-online"></span> Online</td>
+                            <td>18/05/2024 14:32</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <h2>Informações dos Veículos</h2>
+                <div id="vehicleInfo">
+                    <div class="vehicle-card">
+                        <p><span class="vehicle-info-label">Placa:</span> ABC-1234</p>
+                        <p><span class="vehicle-info-label">Tipo:</span> Carro</p>
+                        <p><span class="vehicle-info-label">Data/Hora:</span> 18/05/2024 14:30</p>
+                        <p><span class="vehicle-info-label">Velocidade:</span> 60 km/h</p>
+                        <p><span class="vehicle-info-label">Peso:</span> 1200 kg</p>
+                    </div>
+                    <div class="vehicle-card">
+                        <p><span class="vehicle-info-label">Placa:</span> XYZ-5678</p>
+                        <p><span class="vehicle-info-label">Tipo:</span> Caminhão</p>
+                        <p><span class="vehicle-info-label">Data/Hora:</span> 18/05/2024 14:35</p>
+                        <p><span class="vehicle-info-label">Velocidade:</span> 45 km/h</p>
+                        <p><span class="vehicle-info-label">Peso:</span> 8000 kg</p>
+                    </div>
+                    <div class="vehicle-card">
+                        <p><span class="vehicle-info-label">Placa:</span> DEF-9012</p>
+                        <p><span class="vehicle-info-label">Tipo:</span> Moto</p>
+                        <p><span class="vehicle-info-label">Data/Hora:</span> 18/05/2024 14:40</p>
+                        <p><span class="vehicle-info-label">Velocidade:</span> 80 km/h</p>
+                        <p><span class="vehicle-info-label">Peso:</span> 180 kg</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="additional-info">
+            <h2>Gráfico de Tráfego</h2>
+            <div id="chartContainer"></div>
+        </div>
+
+        <a href="index.html" class="back-btn">Voltar</a>
+
+        <footer>
+            <p>&copy; 2024 TECSIDEL. Todos os direitos reservados.</p>
+        </footer>
+    </div>
+
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script>
+        window.onload = function () {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                theme: "light2",
+                title:{
+                    text: "Volume de Tráfego Diário"
+                },
+                axisY:{
+                    title: "Número de Veículos"
+                },
+                data: [{        
+                    type: "column",  
+                    dataPoints: [      
+                        { y: 450, label: "Segunda" },
+                        { y: 414, label: "Terça" },
+                        { y: 520, label: "Quarta" },
+                        { y: 460, label: "Quinta" },
+                        { y: 450, label: "Sexta" },
+                        { y: 500, label: "Sábado" },
+                        { y: 480, label: "Domingo" }
+                    ]
+                }]
+            });
+            chart.render();
+        }
+    </script>
+</body>
+</html>
